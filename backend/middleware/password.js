@@ -1,5 +1,6 @@
 const passwordValid = require('password-validator');
 
+/* create a validation schema */
 const passwordSchema = new passwordValid();
 
 passwordSchema
