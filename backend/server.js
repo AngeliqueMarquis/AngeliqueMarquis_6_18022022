@@ -1,6 +1,10 @@
+/* http package import */
 const http = require('http');
+
+/* application import */
 const app = require('./app');
 
+/* return a valid port */
 const normalizePort = val => {
   const port = parseInt(val, 10);
 
@@ -12,6 +16,8 @@ const normalizePort = val => {
   }
   return false;
 };
+
+/* listening to port 3000 */
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
@@ -35,6 +41,7 @@ const errorHandler = (error) => {
   }
 };
 
+/* server creation */
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
