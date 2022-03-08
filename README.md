@@ -11,8 +11,9 @@ The data base is provided by MongoDB.
 ENVIRONMENTAL VARIABLES
 The file .env provides these environmental variables :
 DB_USERNAME=
+
 DB_PASSWORD=
 
 EMAIL_KEY=
-`
+
 KEY_SECRET=
