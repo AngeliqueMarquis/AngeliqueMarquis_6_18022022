@@ -31,14 +31,31 @@ exports.getOneSauces = (req, res, next) => {
  
 /* modify a sauce */  
 exports.modifySauces = (req, res, next) => {
+    if (req, res){
+      /* look for the sauce */
+      Sauces.findOne({_id: req.params.id})
+        .then((sauces) => {
+          /* search the image */
+          const filename = sauces.imageUrl.split('/images/')[1];
+          
+          /* remove image from folder */
+          fs.unlink(`images/${filename}`, (err) => {
+            if(err) throw error;
+          })
+        })
+        .catch (error => res.status(400).json({ error }));
+    }else{
+      console.log("False");
+    }
     const saucesObject = req.file ?
     {
-      ...JSON.parse(req.body.sauces),
+      ...JSON.parse(req.body.sauce),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-  Sauces.updateOne({ _id: req.params.id }, { ...saucesObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
-    .catch(error => res.status(400).json({ error }));
+
+    Sauces.updateOne({ _id: req.params.id }, { ...saucesObject, _id: req.params.id })
+      .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
+      .catch(error => res.status(400).json({ error }));
 };
 
 /* delete a sauce */
