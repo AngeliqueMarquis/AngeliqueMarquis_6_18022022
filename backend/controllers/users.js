@@ -3,6 +3,12 @@ const bcrypt = require('bcrypt');
 /* jsonwebtoken import */
 const jwt = require('jsonwebtoken')
 
+/* cryptojs import */
+const cryptojs = require('crypto-js');
+
+/* Dotenv require */
+require('dotenv').config();
+
 /* models users import */
 const users = require('../models/Users')
 
@@ -12,7 +18,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new users({
-            email: req.body.email,
+            email: cryptojs.HmacSHA256(req.body.email, process.env.EMAIL_KEY).toString(),
             password: hash
         }); 
         /* record in database */
@@ -25,8 +31,9 @@ exports.signup = (req, res, next) => {
 
 /* user login */
 exports.login = (req, res, next) => {
+    const cryptedEmail = cryptojs.HmacSHA256(req.body.email, process.env.EMAIL_KEY).toString();
     /* search user in database */
-    users.findOne({email : req.body.email})
+    users.findOne({email : cryptedEmail})
         .then(user => {
             /* user not found */
             if (!user) {
